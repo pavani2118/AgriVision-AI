@@ -3,6 +3,7 @@ package com.agrivision.backend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -35,7 +36,11 @@ public class User {
 
     private LocalDateTime updatedAt;
 
-
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL
+    )
+    private List<Farm> farms;
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
