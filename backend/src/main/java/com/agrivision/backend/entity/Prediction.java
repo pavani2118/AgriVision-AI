@@ -5,18 +5,17 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 
 @Entity
-@Table(name = "farms")
+@Table(name = "predictions")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Farm {
+public class Prediction {
 
 
     @Id
@@ -30,29 +29,27 @@ public class Farm {
     private User user;
 
 
-    private String farmName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "farm_id")
+    @JsonIgnore
+    private Farm farm;
 
-    private String district;
-
-    private String location;
-
-    private String cropType;
-
-    private double farmSize;
+    private String imageUrl;
 
 
-    private LocalDateTime createdAt;
+    private String predictedDisease;
 
-    @OneToMany(
-            mappedBy = "farm",
-            cascade = CascadeType.ALL
-    )
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    private List<Prediction> predictions;
+
+    private double confidence;
+
+
+    private LocalDateTime predictionDate;
+
+
     @PrePersist
     public void onCreate(){
 
-        createdAt = LocalDateTime.now();
+        predictionDate = LocalDateTime.now();
 
     }
 
