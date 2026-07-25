@@ -25,3 +25,14 @@ dataset/
 # IDE
 .idea/
 .vscode/
+
+# Spring Boot
+backend/target/
+*.class
+
+# IntelliJ
+.idea/
+*.iml
+
+# PostgreSQL credentials
+application.properties
