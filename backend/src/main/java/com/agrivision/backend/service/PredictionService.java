@@ -1,14 +1,14 @@
 package com.agrivision.backend.service;
 
 
-import com.agrivision.backend.dto.PredictionRequest;
-import com.agrivision.backend.entity.*;
-import com.agrivision.backend.repository.*;
+import com.agrivision.backend.dto.PredictionResponse;
+import com.agrivision.backend.entity.Prediction;
+import com.agrivision.backend.entity.User;
+import com.agrivision.backend.repository.PredictionRepository;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 
@@ -20,51 +20,36 @@ public class PredictionService {
 
     private final PredictionRepository predictionRepository;
 
-    private final FarmRepository farmRepository;
 
 
-
-    public Prediction createPrediction(
-            PredictionRequest request,
-            User user
-    ){
+    public List<PredictionResponse> getUserPredictions(User user){
 
 
-        Farm farm =
-                farmRepository.findById(request.getFarmId())
-                        .orElseThrow();
-
-
-
-        Prediction prediction =
-                Prediction.builder()
-
-                        .farm(farm)
-
-                        .user(user)
-
-                        .imageUrl(request.getImageUrl())
-
-                        .predictedDisease(
-                                request.getPredictedDisease()
-                        )
-
-                        .confidence(
-                                request.getConfidence()
-                        )
-
-                        .build();
-
-
-        return predictionRepository.save(prediction);
+        return predictionRepository.findByUser(user)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
 
     }
 
 
 
-    public List<Prediction> getHistory(User user){
+    private PredictionResponse mapToResponse(Prediction prediction){
 
-        return predictionRepository.findByUser(user);
+
+        return new PredictionResponse(
+
+                prediction.getId(),
+
+                prediction.getPredictedDisease(),
+
+                prediction.getConfidence(),
+
+                prediction.getImageUrl(),
+
+                prediction.getPredictionDate()
+
+        );
 
     }
 
