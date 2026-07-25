@@ -36,3 +36,6 @@ backend/target/
 
 # PostgreSQL credentials
 application.properties
+
+# TensorFlow models
+ai-service/models/*.h5
