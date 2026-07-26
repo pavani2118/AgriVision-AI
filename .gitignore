@@ -25,3 +25,17 @@ dataset/
 # IDE
 .idea/
 .vscode/
+
+# Spring Boot
+backend/target/
+*.class
+
+# IntelliJ
+.idea/
+*.iml
+
+# PostgreSQL credentials
+application.properties
+
+# TensorFlow models
+ai-service/models/*.h5
