@@ -18,6 +18,7 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
@@ -27,13 +28,19 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
+                        // Public APIs
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/weather/**").permitAll()
 
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        // Admin APIs
+                        .requestMatchers("/api/admin/**")
+                        .hasRole("ADMIN")
 
+                        // Farmer APIs
                         .requestMatchers("/api/farmer/**")
                         .hasAnyRole("FARMER", "ADMIN")
 
+                        // Everything else requires JWT
                         .anyRequest().authenticated()
                 )
 
